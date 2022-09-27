@@ -1,31 +1,60 @@
 import pygame, sys
 from figure import Figure_base, Figure1, Figure2, Figure3
+from grid import Grid
+import random
+
+"""
+    to do:
+        -points displaying
+        -end of game (losing)
+        -can draw() and coord() methods me inherited?
+        -add more figure's shapes
+        -fix error when you move the figure outside the screen
+"""
 
 class Tetris(object):
     def __init__(self):
         pygame.init()
         
-        self.screen = pygame.display.set_mode((1280,720))
+        self.screen = pygame.display.set_mode((720,720))
+
+        self.colors = [(200,0,0), (0,200,0), (0,0,200), (200,200,0),
+                       (0,200,200), (200,0,200)]
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(0)
 
-        self.figures = [Figure1(self), Figure2(self), Figure3(self), Figure2(self),
-                        Figure3(self), Figure1(self)]
+        self.figures = [Figure1, Figure2, Figure3]
+
+        self.gr = Grid(self)
+
+        self.points = 0
+
+      
 
         while True:
-            x = 1
-            for fig in self.figures:
-                x+=1
-                while(not fig.is_done()):
-                    self.screen.fill((0,0,0))
-                    for f in self.figures[0:x]:
-                        self.draw(f)
-                    pygame.display.flip()
-                    self.tick(fig)
-                    self.events(fig)
-        
+            fig = random.choice(self.figures)(self)
+
+            while(not fig.is_done()):
+                    
+                self.screen.fill((0,0,0))
+                    
+                self.draw(fig)
+                self.gr.draw()
+                
+                pygame.display.flip()
+                
+                self.tick(fig)
+                self.events(fig)
+            coord = fig.coord()
+            for c in coord:
+                self.gr.fill(c.x, c.y, fig.color)
+
+            if self.gr.plus_point():
+                self.gr.del_row(self.gr.plus_point() - 1)
+                print(self.points)
+
 
     def draw(self,fig):
         fig.draw()
