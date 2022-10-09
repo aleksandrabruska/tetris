@@ -53,12 +53,25 @@ class Figure_base(object):
         pygame.draw.polygon(self.game.screen, self.color, self.points)
 
     def move_left(self):
-        if self.vel != 0:
-            self.pos = Vector2(self.pos.x - self.width, self.pos.y)
+
+        f_width = min(vec.x for vec in self.points)
+        """
+        for vec in self.points:
+            if vec.x == f_width:
+                if self.game.gr.grid[int(vec.y//self.height)][int(f_width//self.width)] != 0:
+                    return
+        """
+        
+        if self.vel != 0 and f_width >= self.width:
+                self.pos = Vector2(self.pos.x - self.width, self.pos.y)
             
     def move_right(self):
-        if self.vel != 0:
+        f_width = max(vec.x for vec in self.points)
+        if self.vel != 0 and f_width < self.game.screen.get_size()[0]:
             self.pos = Vector2(self.pos.x + self.width, self.pos.y)
+
+        else:
+            print(self.pos.x + f_width, self.game.screen.get_size()[0])
 
     def rotate_left(self):
         if self.vel != 0:
@@ -75,7 +88,7 @@ class Figure_base(object):
         
 
 class Figure1(Figure_base):
-        
+ 
     
     def draw(self):
         
@@ -94,6 +107,8 @@ class Figure1(Figure_base):
     
 
 class Figure2(Figure_base):
+
+        
     def draw(self):
         self.points = [Vector2(0,0), Vector2(3*self.width,0),
                        Vector2(3* self.width, self.height), Vector2(0, self.height)]
@@ -108,6 +123,9 @@ class Figure2(Figure_base):
         
 
 class Figure3(Figure_base):
+
+
+        
     def draw(self):
         self.points = [Vector2(0,0), Vector2(2 * self.width,0),
                        Vector2(2 * self.width, 2 * self.height), Vector2(self.width, 2* self.height),
@@ -120,6 +138,46 @@ class Figure3(Figure_base):
         vecs = [v + Vector2(self.width/2, self.width/2) for v in vecs]  #środki blocków
         vecs = [v.rotate(self.angle) for v in vecs]
         return [((v + self.pos)) for v in vecs]
+
+class Figure4(Figure_base):
+
+  
+        
+    def draw(self):
+        self.points = [Vector2(0,0), Vector2(self.width * 2, 0), Vector2(self.width * 2, self.height * 2), Vector2(0, self.height * 2)]
+
+        Figure_base.draw(self)
+
+
+    def coord(self): 
+        vecs = [Vector2(0,0), Vector2(self.width, 0), Vector2(0, self.height), Vector2(self.width, self.height)]
+        vecs = [v + Vector2(self.width/2, self.width/2) for v in vecs]  #środki blocków
+        vecs = [v.rotate(self.angle) for v in vecs]
+        return [((v + self.pos)) for v in vecs]
+
+
+
+class Figure5(Figure_base):
+
+    def init(self):
+        self.f_width = 3
+        Figure_base.init(self)
+        
+    def draw(self):
+        self.points = [Vector2(0,0), Vector2(self.width * 2, 0), Vector2(self.width * 2, self.height), Vector2(self.width * 3, self.height),
+                       Vector2(self.width*3, self.height * 2), Vector2(self.width, self.height * 2), Vector2(self.width, self.height),
+                       Vector2(0, self.height)]
+
+        Figure_base.draw(self)
+
+
+    def coord(self): 
+        vecs = [Vector2(0,0), Vector2(self.width, 0), Vector2(self.width, self.height), Vector2(self.width * 2, self.height)]
+        vecs = [v + Vector2(self.width/2, self.width/2) for v in vecs]  #środki blocków
+        vecs = [v.rotate(self.angle) for v in vecs]
+        return [((v + self.pos)) for v in vecs]
+
+        
     
 
  

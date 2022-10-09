@@ -1,14 +1,20 @@
 import pygame, sys
-from figure import Figure_base, Figure1, Figure2, Figure3
+from figure import Figure_base, Figure1, Figure2, Figure3, Figure4, Figure5
 from grid import Grid
 import random
 
 """
     to do:
         -points displaying
-        -end of game (losing)
         -can draw() and coord() methods me inherited?
-        -add more figure's shapes
+        -przyspieszanie? - problem ze zmienianiem predkosci
+        -error: moving figures into each other
+        -comments?
+
+
+    changes made:
+        -figure shapes
+        -end of game
         -fix error when you move the figure outside the screen
 """
 
@@ -25,7 +31,7 @@ class Tetris(object):
             if event.type == pygame.QUIT:
                 exit(0)
 
-        self.figures = [Figure1, Figure2, Figure3]
+        self.figures = [Figure1, Figure2, Figure3, Figure4, Figure5]
 
         self.gr = Grid(self)
 
@@ -54,6 +60,9 @@ class Tetris(object):
             if self.gr.plus_point():
                 self.gr.del_row(self.gr.plus_point() - 1)
                 print(self.points)
+
+            if self.gr.end_of_game():
+                break
 
 
     def draw(self,fig):

@@ -26,6 +26,12 @@ class Grid(object):
                     my_rect = pygame.Rect(self.width * x, self.height * y,self.width,self.height)
                     pygame.draw.rect(self.game.screen, self.game.colors[self.grid[y][x] - 1], my_rect)
 
+    def end_of_game(self):
+        for x in range(self.w_num):
+            if self.grid[1][x] != 0:
+                return True
+        return False
+
     def check(self, x, y):                  #popraw, zeby bylo ladniejsze
     
         if y < 18:
